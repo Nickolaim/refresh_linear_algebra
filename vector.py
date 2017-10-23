@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 
+import numbers
+
 class Vector(object):
     def __init__(self, coordinates):
         try:
@@ -33,4 +35,11 @@ class Vector(object):
         result = []
         for i in range(0, self.dimension):
             result.append(self.coordinates[i] - other.coordinates[i])
+        return Vector(result)
+
+    def __mul__(self, other):
+        assert isinstance(other, numbers.Number)
+        result = []
+        for i in range(0, self.dimension):
+            result.append(self.coordinates[i] * other)
         return Vector(result)

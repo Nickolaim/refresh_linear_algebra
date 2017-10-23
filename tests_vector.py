@@ -9,10 +9,13 @@ class VectorTestCase(unittest.TestCase):
     def test_addition(self):
         v1 = Vector([0, 0, 0])
         v2 = Vector([1, 1, 1])
-        self.assertEqual(v2, v1+v2)
+        self.assertEqual(v2, v1 + v2)
 
-    def test_substaction(self):
-        self.assertEqual(Vector([-1, -1]), Vector([0, 0]) - Vector([1,1]))
+    def test_subtraction(self):
+        self.assertEqual(Vector([-1, -1]), Vector([0, 0]) - Vector([1, 1]))
+
+    def test_multiplication(self):
+        self.assertEqual(Vector([2, -2]), Vector([1, -1]) * 2)
 
     def test_quiz(self):
         v1 = Vector([8.218, -9.341])
@@ -24,6 +27,10 @@ class VectorTestCase(unittest.TestCase):
         v5 = Vector([-8.223, 0.878])
         v6 = v4 - v5
         print(v6)
+
+        v7 = Vector([1.671, -1.012, -0.318]) * 7.41
+        print(v7)
+
 
 if __name__ == '__main__':
     unittest.main()
