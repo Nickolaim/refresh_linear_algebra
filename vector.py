@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 class Vector(object):
     def __init__(self, coordinates):
         try:
@@ -15,5 +18,19 @@ class Vector(object):
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
 
-    def __eq__(self, v):
-        return self.coordinates == v.coordinates
+    def __eq__(self, other):
+        return self.coordinates == other.coordinates
+
+    def __add__(self, other):
+        assert other.dimension == self.dimension
+        result = []
+        for i in range(0, self.dimension):
+            result.append(self.coordinates[i] + other.coordinates[i])
+        return Vector(result)
+
+    def __sub__(self, other):
+        assert other.dimension == self.dimension
+        result = []
+        for i in range(0, self.dimension):
+            result.append(self.coordinates[i] - other.coordinates[i])
+        return Vector(result)
