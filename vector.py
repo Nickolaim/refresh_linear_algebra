@@ -25,21 +25,15 @@ class Vector(object):
 
     def __add__(self, other):
         assert other.dimension == self.dimension
-        result = []
-        for i in range(0, self.dimension):
-            result.append(self.coordinates[i] + other.coordinates[i])
+        result = [x + y for x, y in zip(self.coordinates, other.coordinates)]
         return Vector(result)
 
     def __sub__(self, other):
         assert other.dimension == self.dimension
-        result = []
-        for i in range(0, self.dimension):
-            result.append(self.coordinates[i] - other.coordinates[i])
+        result = [x - y for x, y in zip(self.coordinates, other.coordinates)]
         return Vector(result)
 
     def __mul__(self, other):
         assert isinstance(other, numbers.Number)
-        result = []
-        for i in range(0, self.dimension):
-            result.append(self.coordinates[i] * other)
+        result = [x * other for x in self.coordinates]
         return Vector(result)
