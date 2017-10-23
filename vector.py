@@ -2,6 +2,8 @@
 
 
 import numbers
+from math import sqrt
+
 
 class Vector(object):
     def __init__(self, coordinates):
@@ -37,3 +39,14 @@ class Vector(object):
         assert isinstance(other, numbers.Number)
         result = [x * other for x in self.coordinates]
         return Vector(result)
+
+    def magnitude(self):
+        return sqrt(sum([i * i for i in self.coordinates]))
+
+    def normalized_vector(self):
+        try:
+            magnitude = self.magnitude()
+            result = [x / magnitude for x in self.coordinates]
+            return Vector(result)
+        except ZeroDivisionError:
+            raise Exception("Cannot normalize zero vector")
