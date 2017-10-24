@@ -2,7 +2,7 @@
 
 
 import numbers
-from math import sqrt
+from math import sqrt, acos, pi
 
 
 class Vector(object):
@@ -50,3 +50,10 @@ class Vector(object):
             return Vector(result)
         except ZeroDivisionError:
             raise Exception("Cannot normalize zero vector")
+
+    def dot_product(self, other):
+        return sum([x * y for x, y in zip(self.coordinates, other.coordinates)])
+
+    def angle(self, other, degree_or_radian="radian"):
+        angle_rad = acos(self.dot_product(other) / (self.magnitude() * other.magnitude()))
+        return angle_rad if degree_or_radian == "radian" else angle_rad * 180.0 / pi
