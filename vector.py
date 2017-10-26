@@ -37,9 +37,14 @@ class Vector(object):
         result = [x - y for x, y in zip(self.coordinates, other.coordinates)]
         return Vector(result)
 
-    def __mul__(self, other):
-        assert isinstance(other, numbers.Number)
-        result = [x * other for x in self.coordinates]
+    def __mul__(self, scalar):
+        """
+        Multiply vector by a scalar
+        :param Number scalar: scalar for multiplication
+        :return Vector: multiplied vector
+        """
+        assert isinstance(scalar, numbers.Number)
+        result = [x * scalar for x in self.coordinates]
         return Vector(result)
 
     def magnitude(self):
@@ -72,3 +77,13 @@ class Vector(object):
 
     def is_orthogonal(self, other, tolerance=TOLERANCE):
         return abs(self.dot_product(other)) < tolerance
+
+    def projection(self, other):
+        """
+        Project other vector to self
+        :param Vector other: Other vector
+        :return Vector: Projection of the other vector to this vector
+        """
+        c = self.dot_product(other) / self.dot_product(self)
+        return self * c
+

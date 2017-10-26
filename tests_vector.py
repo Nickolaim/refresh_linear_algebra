@@ -40,6 +40,10 @@ class VectorTestCase(unittest.TestCase):
         self.assertFalse(Vector([1, 2, 3]).is_orthogonal(Vector([2, 4, 6])))
         self.assertTrue(Vector([1, 0]).is_orthogonal(Vector([0, 5])))
 
+    def test_projection(self):
+        self.assertEqual(Vector([1, 1]), Vector([1, 1]).projection(Vector([1, 1])))
+        self.assertEqual(Vector([0, 0]), Vector([1, 0]).projection(Vector([0, 1])))
+
     def test_quiz(self):
         test = [
             (Vector([-7.579, -7.88]), Vector([22.737, 23.64])),
@@ -50,6 +54,16 @@ class VectorTestCase(unittest.TestCase):
         for t in test:
             print(t[0].is_parallel(t[1]))
             print(t[0].is_orthogonal(t[1]))
+
+        print(Vector([0.825, 2.036]).projection(Vector([3.039, 1.879])))
+        v1 = Vector([-9.88, -3.264, -8.159])
+        v2 = Vector([-2.155, -9.353, -9.473])
+        print(v1 - v2.projection(v1))
+        v3 = Vector([3.009, -6.172, 3.692, -2.51])
+        v4 = Vector([6.404, -9.144, 2.759, 8.718])
+        v5 = v4.projection(v3)
+        print(v5)
+        print(v3 - v5)
 
 
 if __name__ == '__main__':
