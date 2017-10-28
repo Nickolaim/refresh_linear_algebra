@@ -80,10 +80,21 @@ class Vector(object):
 
     def projection(self, other):
         """
-        Project other vector to self
-        :param Vector other: Other vector
-        :return Vector: Projection of the other vector to this vector
+        Project the other vector to self
+        :param Vector other: other vector
+        :return Vector: projection of the other vector to this vector
         """
         c = self.dot_product(other) / self.dot_product(self)
         return self * c
 
+    def cross_product(self, other):
+        """
+        Cross product of self and the other vector
+        :param Vector other: the other vector
+        :return Vector: cross product vector
+        """
+        return Vector([
+            self.coordinates[1] * other.coordinates[2] - other.coordinates[1] * self.coordinates[2],
+            -(self.coordinates[0] * other.coordinates[2] - other.coordinates[0] * self.coordinates[2]),
+            self.coordinates[0] * other.coordinates[1] - other.coordinates[0] * self.coordinates[1]
+        ])
