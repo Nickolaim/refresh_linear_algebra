@@ -6,42 +6,39 @@ getcontext().prec = 30
 
 
 class Line(object):
-
-    NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
+    NO_NONZERO_ELEMENTS_FOUND = 'No nonzero elements found'
 
     def __init__(self, normal_vector=None, constant_term=None):
         self.dimension = 2
 
         if not normal_vector:
-            all_zeros = ['0']*self.dimension
+            all_zeros = ['0'] * self.dimension
             normal_vector = Vector(all_zeros)
         self.normal_vector = normal_vector
 
         if not constant_term:
             constant_term = Decimal('0')
         self.constant_term = Decimal(constant_term)
-
+        self.basepoint = None
         self.set_basepoint()
-
 
     def set_basepoint(self):
         try:
             n = self.normal_vector
             c = self.constant_term
-            basepoint_coords = ['0']*self.dimension
+            basepoint_coordinates = ['0'] * self.dimension
 
             initial_index = Line.first_nonzero_index(n)
             initial_coefficient = n[initial_index]
 
-            basepoint_coords[initial_index] = c/initial_coefficient
-            self.basepoint = Vector(basepoint_coords)
+            basepoint_coordinates[initial_index] = c / initial_coefficient
+            self.basepoint = Vector(basepoint_coordinates)
 
         except Exception as e:
-            if str(e) == Line.NO_NONZERO_ELTS_FOUND_MSG:
+            if str(e) == Line.NO_NONZERO_ELEMENTS_FOUND:
                 self.basepoint = None
             else:
                 raise e
-
 
     def __str__(self):
 
@@ -52,31 +49,31 @@ class Line(object):
             if coefficient % 1 == 0:
                 coefficient = int(coefficient)
 
-            output = ''
+            result = ''
 
             if coefficient < 0:
-                output += '-'
+                result += '-'
             if coefficient > 0 and not is_initial_term:
-                output += '+'
+                result += '+'
 
             if not is_initial_term:
-                output += ' '
+                result += ' '
 
             if abs(coefficient) != 1:
-                output += '{}'.format(abs(coefficient))
+                result += '{}'.format(abs(coefficient))
 
-            return output
+            return result
 
         n = self.normal_vector
 
         try:
             initial_index = Line.first_nonzero_index(n)
-            terms = [write_coefficient(n[i], is_initial_term=(i==initial_index)) + 'x_{}'.format(i+1)
+            terms = [write_coefficient(n[i], is_initial_term=(i == initial_index)) + 'x_{}'.format(i + 1)
                      for i in range(self.dimension) if round(n[i], num_decimal_places) != 0]
             output = ' '.join(terms)
 
         except Exception as e:
-            if str(e) == self.NO_NONZERO_ELTS_FOUND_MSG:
+            if str(e) == self.NO_NONZERO_ELEMENTS_FOUND:
                 output = '0'
             else:
                 raise e
@@ -88,13 +85,12 @@ class Line(object):
 
         return output
 
-
     @staticmethod
     def first_nonzero_index(iterable):
         for k, item in enumerate(iterable):
             if not MyDecimal(item).is_near_zero():
                 return k
-        raise Exception(Line.NO_NONZERO_ELTS_FOUND_MSG)
+        raise Exception(Line.NO_NONZERO_ELEMENTS_FOUND)
 
 
 class MyDecimal(Decimal):
