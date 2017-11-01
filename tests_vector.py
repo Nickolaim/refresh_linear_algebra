@@ -31,14 +31,14 @@ class VectorTestCase(unittest.TestCase):
         self.assertAlmostEqual(math.pi / 2, Vector([0, 1]).angle(Vector([1, 0])))
         self.assertAlmostEqual(0, Vector([1, 1]).angle(Vector([1, 1]), "degree"), places=5)
 
-    def test_is_parallel(self):
-        self.assertTrue(Vector([1, 2, 3]).is_parallel(Vector([2, 4, 6])))
-        self.assertFalse(Vector([3, 1]).is_parallel(Vector([1, 1])))
-        self.assertTrue(Vector([3, 1]).is_parallel(Vector([0, 0])))
+    def test_are_parallel(self):
+        self.assertTrue(Vector([1, 2, 3]).are_parallel(Vector([2, 4, 6])))
+        self.assertFalse(Vector([3, 1]).are_parallel(Vector([1, 1])))
+        self.assertTrue(Vector([3, 1]).are_parallel(Vector([0, 0])))
 
-    def test_is_orthogonal(self):
-        self.assertFalse(Vector([1, 2, 3]).is_orthogonal(Vector([2, 4, 6])))
-        self.assertTrue(Vector([1, 0]).is_orthogonal(Vector([0, 5])))
+    def test_are_orthogonal(self):
+        self.assertFalse(Vector([1, 2, 3]).are_orthogonal(Vector([2, 4, 6])))
+        self.assertTrue(Vector([1, 0]).are_orthogonal(Vector([0, 5])))
 
     def test_projection(self):
         self.assertEqual(Vector([1, 1]), Vector([1, 1]).projection(Vector([1, 1])))

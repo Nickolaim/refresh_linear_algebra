@@ -80,13 +80,13 @@ class Vector(object):
         set_coordinates = set(self.coordinates)
         return len(set_coordinates) == 1 and 0 in set_coordinates
 
-    def is_parallel(self, other, tolerance=TOLERANCE):
+    def are_parallel(self, other, tolerance=TOLERANCE):
         if self.is_zero_vector() or other.is_zero_vector():
             return True
         angle = self.angle(other)
         return abs(angle) < tolerance or abs(angle - pi) < tolerance
 
-    def is_orthogonal(self, other, tolerance=TOLERANCE):
+    def are_orthogonal(self, other, tolerance=TOLERANCE):
         return abs(self.dot_product(other)) < tolerance
 
     def projection(self, other):

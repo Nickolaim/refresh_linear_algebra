@@ -85,13 +85,26 @@ class Line(object):
 
         return output
 
-    def is_parallel(self, other):
+    def are_parallel(self, other):
         """
-        Are the 2 lines parallel
+        Are the 2 lines parallel?
         :param Line other:
         :return Bool: True if the lines are parallel
         """
-        return self.normal_vector.is_parallel(other.normal_vector)
+        return self.normal_vector.are_parallel(other.normal_vector)
+
+    def are_equal(self, other):
+        """
+        Are the 2 lines equal?
+        :param Line other:
+        :return Boolean: True if the lines are equal
+        """
+        if not self.are_parallel(other):
+            return False
+        p1 = self.get_point_on_line()
+        p2 = other.get_point_on_line()
+        vp = Vector([p1[0] - p2[0], p1[1] - p2[1]])
+        return vp.are_orthogonal(self.normal_vector) and vp.are_orthogonal(other.normal_vector)
 
     @staticmethod
     def first_nonzero_index(iterable):
@@ -99,6 +112,14 @@ class Line(object):
             if not MyDecimal(item).is_near_zero():
                 return k
         raise Exception(Line.NO_NONZERO_ELEMENTS_FOUND)
+
+    def get_point_on_line(self):
+        if self.normal_vector[0] == self.normal_vector[1] == 0:
+            return 0, 0
+        if self.normal_vector[0] == 0:
+            return 0, self.constant_term / self.normal_vector[1]
+
+        return self.constant_term / self.normal_vector[0], 0
 
 
 class MyDecimal(Decimal):
