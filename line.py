@@ -85,6 +85,14 @@ class Line(object):
 
         return output
 
+    def is_parallel(self, other):
+        """
+        Are the 2 lines parallel
+        :param Line other:
+        :return Bool: True if the lines are parallel
+        """
+        return self.normal_vector.is_parallel(other.normal_vector)
+
     @staticmethod
     def first_nonzero_index(iterable):
         for k, item in enumerate(iterable):
