@@ -14,7 +14,7 @@ class Line(object):
         if not normal_vector:
             all_zeros = ['0'] * self.dimension
             normal_vector = Vector(all_zeros)
-        self.normal_vector = normal_vector
+        self.normal_vector = Vector([Decimal(x) for x in normal_vector])
 
         if not constant_term:
             constant_term = Decimal('0')
@@ -31,7 +31,7 @@ class Line(object):
             initial_index = Line.first_nonzero_index(n)
             initial_coefficient = n[initial_index]
 
-            basepoint_coordinates[initial_index] = c / initial_coefficient
+            basepoint_coordinates[initial_index] = c / Decimal(initial_coefficient)
             self.basepoint = Vector(basepoint_coordinates)
 
         except Exception as e:
@@ -105,6 +105,20 @@ class Line(object):
         p2 = other.get_point_on_line()
         vp = Vector([p1[0] - p2[0], p1[1] - p2[1]])
         return vp.are_orthogonal(self.normal_vector) and vp.are_orthogonal(other.normal_vector)
+
+    def intersection(self, other):
+        """
+        What is intersection point of 2 lines?
+        :param Line other: Line that is intersected with
+        :return (float, float):  Intersection point if exists, otherwise None
+        """
+        if self.are_parallel(other):
+            return None
+
+        den = self.normal_vector[0] * other.normal_vector[1] - self.normal_vector[1] * other.normal_vector[0]
+        x = (other.normal_vector[1] * self.constant_term - self.normal_vector[1] * other.constant_term) / den
+        y = (-other.normal_vector[0] * self.constant_term + self.normal_vector[0] * other.constant_term) / den
+        return x, y
 
     @staticmethod
     def first_nonzero_index(iterable):

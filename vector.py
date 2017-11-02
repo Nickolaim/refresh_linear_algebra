@@ -4,6 +4,8 @@
 import numbers
 from math import sqrt, acos, pi
 
+from decimal import Decimal
+
 TOLERANCE = 0.00000001
 
 
@@ -12,7 +14,7 @@ class Vector(object):
         try:
             if not coordinates:
                 raise ValueError
-            self.coordinates = tuple(coordinates)
+            self.coordinates = tuple([Decimal(a) for a in coordinates])
             self.dimension = len(coordinates)
 
         except ValueError:
@@ -54,7 +56,7 @@ class Vector(object):
         return Vector(result)
 
     def magnitude(self):
-        return sqrt(sum([i * i for i in self.coordinates]))
+        return Decimal(sqrt(sum([i * i for i in self.coordinates])))
 
     def normalized_vector(self):
         try:
