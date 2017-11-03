@@ -6,7 +6,7 @@ from math import sqrt, acos, pi
 
 from decimal import Decimal
 
-TOLERANCE = 0.00000001
+TOLERANCE = 1e-10
 
 
 class Vector(object):
@@ -33,7 +33,12 @@ class Vector(object):
         return self.coordinates[index]
 
     def __eq__(self, other):
-        return self.coordinates == other.coordinates
+        if len(self.coordinates) != len(other.coordinates):
+            return False
+        for x,y in zip(self.coordinates, other.coordinates):
+            if abs(x - y) > TOLERANCE:
+                return False
+        return True
 
     def __add__(self, other):
         assert other.dimension == self.dimension
