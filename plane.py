@@ -1,5 +1,6 @@
 from decimal import Decimal, getcontext
 
+from line import MyDecimal
 from vector import Vector
 
 getcontext().prec = 30
@@ -117,7 +118,3 @@ class Plane(object):
 
         return tuple(result)
 
-
-class MyDecimal(Decimal):
-    def is_near_zero(self, eps=1e-10):
-        return abs(self) < eps
