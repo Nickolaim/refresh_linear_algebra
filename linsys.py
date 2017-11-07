@@ -28,16 +28,16 @@ class LinearSystem(object):
         self.planes[row2] = tmp
 
     def multiply_coefficient_and_row(self, coefficient, row):
-        p = self.planes[row]
-        p.normal_vector *= coefficient
-        p.constant_term *= coefficient
+        self.planes[row] = Plane(self.planes[row].normal_vector * coefficient,
+                                 self.planes[row].constant_term * coefficient)
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
-        p = Plane(self.planes[row_to_add].normal_vector,self.planes[row_to_add].constant_term)
+        p = Plane(self.planes[row_to_add].normal_vector, self.planes[row_to_add].constant_term)
         p.normal_vector = p.normal_vector * coefficient
         p.constant_term *= coefficient
-        self.planes[row_to_be_added_to].normal_vector += p.normal_vector
-        self.planes[row_to_be_added_to].constant_term += p.constant_term
+        self.planes[row_to_be_added_to] = Plane(
+            self.planes[row_to_be_added_to].normal_vector + p.normal_vector,
+            self.planes[row_to_be_added_to].constant_term + p.constant_term)
 
     def indices_of_first_nonzero_terms_in_each_row(self):
         num_equations = len(self)
