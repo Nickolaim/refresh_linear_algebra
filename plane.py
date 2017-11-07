@@ -35,6 +35,14 @@ class Plane(object):
             basepoint_coordinates[initial_index] = c / Decimal(initial_coefficient)
             self.basepoint = Vector(basepoint_coordinates)
 
+    def __eq__(self, other):
+        """
+        Are planes equal?
+        :param Plane other: The other plane
+        :return Bool: True if planes are equal otherwise false
+        """
+        return self.normal_vector == other.normal_vector and self.constant_term == other.constant_term
+
     def __str__(self):
 
         num_decimal_places = 3

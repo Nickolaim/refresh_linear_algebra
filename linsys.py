@@ -23,13 +23,21 @@ class LinearSystem(object):
             raise Exception(self.ALL_PLANES_MUST_BE_IN_SAME_DIM_MSG)
 
     def swap_rows(self, row1, row2):
-        pass  # add your code here
+        tmp = self.planes[row1]
+        self.planes[row1] = self.planes[row2]
+        self.planes[row2] = tmp
 
     def multiply_coefficient_and_row(self, coefficient, row):
-        pass  # add your code here
+        p = self.planes[row]
+        p.normal_vector *= coefficient
+        p.constant_term *= coefficient
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
-        pass  # add your code here
+        p = Plane(self.planes[row_to_add].normal_vector,self.planes[row_to_add].constant_term)
+        p.normal_vector = p.normal_vector * coefficient
+        p.constant_term *= coefficient
+        self.planes[row_to_be_added_to].normal_vector += p.normal_vector
+        self.planes[row_to_be_added_to].constant_term += p.constant_term
 
     def indices_of_first_nonzero_terms_in_each_row(self):
         num_equations = len(self)
