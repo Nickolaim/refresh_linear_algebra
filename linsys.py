@@ -1,8 +1,12 @@
 from decimal import getcontext
 
+from copy import deepcopy
+
+from line import MyDecimal
 from plane import Plane
 
 getcontext().prec = 30
+
 
 
 class LinearSystem(object):
@@ -68,3 +72,41 @@ class LinearSystem(object):
         temp = ['Equation {}: {}'.format(i + 1, p) for i, p in enumerate(self.planes)]
         ret += '\n'.join(temp)
         return ret
+
+    def compute_triangular_form(self):
+        system = deepcopy(self)
+        num_equations = len(system)
+        num_variables = system.dimension
+
+        j = 0
+        for i in range(num_equations):
+            while j < num_variables:
+                c = MyDecimal(system[i].normal_vector[j])
+                if c.is_near_zero():
+                    swap_succeeded = system.swap_with_row_below_for_nonzero_coef(i, j)
+                    if not swap_succeeded:
+                        j += 1
+                        continue
+                system.clear_coefficients_below(i, j)
+                i += 1
+                break
+        return system
+
+    def swap_with_row_below_for_nonzero_coef(self, row, column):
+        num_equations = len(self)
+
+        for k in range(row + 1, num_equations):
+            coef = MyDecimal(self[k].normal_vector[column])
+            if not coef.is_near_zero():
+                self.swap_rows(row, k)
+                return True
+        return False
+
+    def clear_coefficients_below(self, row, column):
+        num_equations = len(self)
+        beta = MyDecimal(self[row].normal_vector[column])
+        for k in range(row + 1, num_equations):
+            n = self[k].normal_vector
+            gamma = n[column]
+            alpha = -gamma/beta
+            self.add_multiple_times_row_to_row(alpha, row, k)

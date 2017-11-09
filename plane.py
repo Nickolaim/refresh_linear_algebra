@@ -8,12 +8,11 @@ getcontext().prec = 30
 
 class Plane(object):
     def __init__(self, normal_vector=None, constant_term=None):
-        self.dimension = 2
-
         if not normal_vector:
-            all_zeros = ['0'] * self.dimension
+            all_zeros = ['0'] * 2
             normal_vector = Vector(all_zeros)
         self.normal_vector = Vector([Decimal(x) for x in normal_vector])
+        self.dimension = self.normal_vector.dimension
 
         if not constant_term:
             constant_term = Decimal('0')
@@ -41,6 +40,9 @@ class Plane(object):
         :param Plane other: The other plane
         :return Bool: True if planes are equal otherwise false
         """
+        are_zero_vectors = self.normal_vector.is_zero_vector() and other.normal_vector.is_zero_vector()
+        if are_zero_vectors:
+            return self.constant_term == other.constant_term
         return self.normal_vector == other.normal_vector and self.constant_term == other.constant_term
 
     def __str__(self):
