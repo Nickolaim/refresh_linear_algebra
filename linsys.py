@@ -74,6 +74,10 @@ class LinearSystem(object):
         return ret
 
     def compute_triangular_form(self):
+        """
+        Computes triangulation for for the linear system
+        :return LinearSystem: system in triangulation form
+        """
         system = deepcopy(self)
         num_equations = len(system)
         num_variables = system.dimension
@@ -101,6 +105,32 @@ class LinearSystem(object):
                 self.swap_rows(row, k)
                 return True
         return False
+
+    def compute_rref(self):
+        """
+        Compute triangulation form for the system
+        :return LinearSystem: system in RREF
+        """
+        system = self.compute_triangular_form()
+        num_equations = len(system)
+
+        # Make pivot variable coefficient = 1
+        for i in range(num_equations):
+            normal_vector = system[i].normal_vector
+            c = normal_vector[i]
+            if MyDecimal(c).is_near_zero():
+                continue
+            if not MyDecimal(c - 1.0).is_near_zero():
+                system.multiply_coefficient_and_row(c, i)
+
+        # Make so each pivot variable is in own column
+        for i in range(num_equations):
+            for j in range(i + 1, len(normal_vector)):
+                cj = normal_vector[j]
+                if not MyDecimal(cj).is_near_zero():
+                    system.add_multiple_times_row_to_row(-cj, j, i)
+
+        return system
 
     def clear_coefficients_below(self, row, column):
         num_equations = len(self)
