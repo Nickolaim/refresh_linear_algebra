@@ -4,7 +4,9 @@
 import numbers
 from math import sqrt, acos, pi
 
-TOLERANCE = 0.00000001
+from decimal import Decimal
+
+TOLERANCE = 1e-10
 
 
 class Vector(object):
@@ -12,7 +14,7 @@ class Vector(object):
         try:
             if not coordinates:
                 raise ValueError
-            self.coordinates = tuple(coordinates)
+            self.coordinates = tuple([Decimal(a) for a in coordinates])
             self.dimension = len(coordinates)
 
         except ValueError:
@@ -21,11 +23,22 @@ class Vector(object):
         except TypeError:
             raise TypeError('The coordinates must be an iterable')
 
+    def __iter__(self):
+        return iter(self.coordinates)
+
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
 
+    def __getitem__(self, index):
+        return self.coordinates[index]
+
     def __eq__(self, other):
-        return self.coordinates == other.coordinates
+        if len(self.coordinates) != len(other.coordinates):
+            return False
+        for x,y in zip(self.coordinates, other.coordinates):
+            if abs(x - y) > TOLERANCE:
+                return False
+        return True
 
     def __add__(self, other):
         assert other.dimension == self.dimension
@@ -48,7 +61,7 @@ class Vector(object):
         return Vector(result)
 
     def magnitude(self):
-        return sqrt(sum([i * i for i in self.coordinates]))
+        return Decimal(sqrt(sum([i * i for i in self.coordinates])))
 
     def normalized_vector(self):
         try:
@@ -62,20 +75,25 @@ class Vector(object):
         return sum([x * y for x, y in zip(self.coordinates, other.coordinates)])
 
     def angle(self, other, degree_or_radian="radian"):
-        angle_rad = acos(self.dot_product(other) / (self.magnitude() * other.magnitude()))
+        angle_with_potential_precision_problem = self.dot_product(other) / (self.magnitude() * other.magnitude())
+        if -1.0 > angle_with_potential_precision_problem > -1.0 - TOLERANCE:
+            angle_with_potential_precision_problem = -1.0
+        elif 1 < angle_with_potential_precision_problem < 1 + TOLERANCE:
+            angle_with_potential_precision_problem = 1.0
+        angle_rad = acos(angle_with_potential_precision_problem)
         return angle_rad if degree_or_radian == "radian" else angle_rad * 180.0 / pi
 
     def is_zero_vector(self):
         set_coordinates = set(self.coordinates)
         return len(set_coordinates) == 1 and 0 in set_coordinates
 
-    def is_parallel(self, other, tolerance=TOLERANCE):
+    def are_parallel(self, other, tolerance=TOLERANCE):
         if self.is_zero_vector() or other.is_zero_vector():
             return True
         angle = self.angle(other)
         return abs(angle) < tolerance or abs(angle - pi) < tolerance
 
-    def is_orthogonal(self, other, tolerance=TOLERANCE):
+    def are_orthogonal(self, other, tolerance=TOLERANCE):
         return abs(self.dot_product(other)) < tolerance
 
     def projection(self, other):
